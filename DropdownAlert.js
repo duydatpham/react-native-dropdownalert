@@ -41,7 +41,7 @@ export default class DropdownAlert extends Component {
     activeStatusBarStyle: PropTypes.string,
     activeStatusBarBackgroundColor: PropTypes.string,
     inactiveStatusBarStyle: PropTypes.string,
-    inactiveStatusBarBackgroundColor: PropTypes.string,
+    inactiveStatusBarBackgroundColor: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
     updateStatusBar: PropTypes.bool,
     elevation: PropTypes.number,
     zIndex: PropTypes.number,
@@ -216,7 +216,7 @@ export default class DropdownAlert extends Component {
           clearTimeout(this._closeTimeoutId);
         }
         this._closeTimeoutId = setTimeout(
-          function() {
+          function () {
             this.close('automatic');
           }.bind(this),
           closeInterval
@@ -230,7 +230,7 @@ export default class DropdownAlert extends Component {
       }
       var self = this;
       setTimeout(
-        function() {
+        function () {
           if (self.state.isOpen == false) {
             self.setState({
               type: type,
@@ -243,7 +243,7 @@ export default class DropdownAlert extends Component {
           self.animate(1);
           if (closeInterval > 1) {
             this._closeTimeoutId = setTimeout(
-              function() {
+              function () {
                 self.close('automatic');
               }.bind(self),
               closeInterval
@@ -269,12 +269,12 @@ export default class DropdownAlert extends Component {
       this.animate(0);
       if (this.props.updateStatusBar) {
         if (IS_ANDROID) {
-          StatusBar.setBackgroundColor(this.props.inactiveStatusBarBackgroundColor, true);
+          StatusBar.setBackgroundColor((typeof this.props.inactiveStatusBarBackgroundColor == 'string') ? this.props.inactiveStatusBarBackgroundColor : this.props.inactiveStatusBarBackgroundColor(), true);
         }
         StatusBar.setBarStyle(this.props.inactiveStatusBarStyle, true);
       }
       setTimeout(
-        function() {
+        function () {
           if (this.state.isOpen) {
             this.setState({
               isOpen: false,
@@ -304,7 +304,7 @@ export default class DropdownAlert extends Component {
       });
       if (this.props.updateStatusBar) {
         if (IS_ANDROID) {
-          StatusBar.setBackgroundColor(this.props.inactiveStatusBarBackgroundColor, true);
+          StatusBar.setBackgroundColor((typeof this.props.inactiveStatusBarBackgroundColor == 'string') ? this.props.inactiveStatusBarBackgroundColor : this.props.inactiveStatusBarBackgroundColor(), true);
         }
         StatusBar.setBarStyle(this.props.inactiveStatusBarStyle, true);
       }
